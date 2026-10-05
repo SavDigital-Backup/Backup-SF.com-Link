@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savoury Digital Factory</title>
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="shortcut icon" href="images/faviconnew.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            font-family: 'Inter', sans-serif;
+            background-color: #697280; /* Fallback sementara jika CSS gagal load */
+        }
+
+        /* Ikon Home di Pojok Kiri Atas */
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            color: #ffffff; 
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.3s;
+            z-index: 10;
+        }
+
+        .home-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Logo dan Judul */
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 15vh;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 80px; 
+            margin-bottom: 10px;
+            color: white; 
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 32px;
+            letter-spacing: 1px;
+            color: #ffffff; 
+        }
+
+        /* Posisi Tombol Tengah Sejajar */
+        .menu-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px; 
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: white;
+            width: 250px; 
+            height: 100px; 
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-item .icon {
+            margin-bottom: 8px;
+        }
+
+        .menu-item svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* Warna Tombol 1: Cerah & Glow (Turquoise/Cyan) */
+        .item1 {
+            background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+        }
+        .item1:hover {
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.7);
+        }
+
+        /* Warna Tombol 2: Cerah & Glow (Orange/Yellow) */
+        .item2 {
+            background: linear-gradient(135deg, #ff7a00 0%, #ffc300 100%);
+            box-shadow: 0 4px 15px rgba(255, 122, 0, 0.4);
+        }
+        .item2:hover {
+            box-shadow: 0 8px 25px rgba(255, 122, 0, 0.7);
+        }
+
+        footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 14px;
+            color: #ffffff;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body dir="ltr" spellcheck="false">
+
+    <!-- Ikon Home -->
+    <a href="http://savouryfactory.com" class="home-btn" title="Back to Home">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+    </a>
+
+    <div class="container" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+        
+        <header>
+            <div class="logo-container">
+                <img src="images/savlogo.png" alt="Savoury Digital Factory Logo" class="logo">
+            </div>
+            <h1>EMERGENCY WORK ORDER (EWO)</h1>
+        </header>
+        
+        <main class="menu-grid">
+            <!-- Tombol ESS Desktop -->
+            <a href="http://202.152.49.236:8080/public/" class="menu-item item1" target="_blank">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+                        <line x1="8" x2="16" y1="21" y2="21"></line>
+                        <line x1="12" x2="12" y1="17" y2="21"></line>
+                    </svg>
+                </div>
+                <span>ESS Desktop</span>
+            </a>
+
+            <!-- Tombol ESS Mobile -->
+            <a href="http://202.152.49.236:8080/m/" class="menu-item item2" target="_blank">   
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect>
+                        <path d="M12 18h.01"></path>
+                    </svg>
+                </div>
+                <span>ESS Mobile</span>
+            </a>
+        </main>
+        
+        <footer>
+            www.savouryfactory.com
+        </footer>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,372 @@
+/* Base styles */
+:root {
+    /* Colors - eye-catching but slightly less bright */
+    --navy: #001440;
+    --primary: #001440;
+    --item1: rgb(219, 79, 72);
+    --item2: rgb(60, 136, 236);
+    --item3: rgb(75, 206, 90);
+    --item4: rgb(225, 96, 214);
+    --item5: rgb(230, 195, 71);
+    --item6: rgb(240, 140, 0);
+    --item7: rgb(135, 100, 232);
+    --item8: rgb(46, 188, 224);
+    --item9: rgb(176, 192, 48);
+    --item10: rgb(122, 75, 139);
+    --item11: rgb(253, 109, 167);
+    --item12: rgb(71, 184, 150);
+    --white: #ffffff;
+    
+    /* Spacing */
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    
+    /* Border radius */
+    --radius-sm: 0.5rem;
+    --radius-md: 1rem;
+    --radius-lg: 1.5rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('images/digital-pattern.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.5; /* Reduced opacity for better harmony */
+    z-index: -1;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+/* Header styles */
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+}
+
+.logo-container {
+    margin-bottom: var(--spacing-md);
+}
+
+.logo {
+    width: 80px;
+    height: auto;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Menu grid styles */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Always 3 columns for all screen sizes */
+    gap: var(--spacing-md);
+    width: 100%;
+    margin-top: var(--spacing-lg);
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: #fff; /* White text for better contrast on bright backgrounds */
+    font-weight: 600;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Elegant hover effect */
+.menu-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Elegant click effect */
+.menu-item:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Ripple effect */
+.menu-item::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+.menu-item:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
+}
+
+.icon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: #fff; /* White stroke for better visibility */
+}
+
+/* Menu item colors - eye-catching but slightly dimmed */
+.item1 {
+    background-color: var(--item1);
+}
+
+.item2 {
+    background-color: var(--item2);
+}
+
+.item3 {
+    background-color: var(--item3);
+}
+
+.item4 {
+    background-color: var(--item4);
+}
+
+.item5 {
+    background-color: var(--item5);
+}
+
+.item6 {
+    background-color: var(--item6);
+}
+
+.item7 {
+    background-color: var(--item7);
+}
+
+.item8 {
+    background-color: var(--item8);
+}
+
+.item9 {
+    background-color: var(--item9);
+}
+
+.item10 {
+    background-color: var(--item10);
+}
+
+.item11 {
+    background-color: var(--item11);
+}
+
+.item12 {
+    background-color: var(--item12);
+}
+
+/* Footer styles */
+footer {
+    margin-top: auto;
+    padding: var(--spacing-md) 0;
+    text-align: center;
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+    .menu-item {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+    
+    .icon {
+        width: 24px;
+        height: 24px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (min-width: 576px) {
+    .logo {
+        width: 100px;
+    }
+}
+
+@media (min-width: 768px) {
+    .menu-item {
+        padding: var(--spacing-lg);
+    }
+    
+    .icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    .logo {
+        width: 120px;
+    }
+}
+
+@media (min-width: 992px) {
+    header {
+        flex-direction: row;
+        justify-content: center;
+        gap: var(--spacing-lg);
+    }
+    
+    .logo-container {
+        margin-bottom: 0;
+    }
+    
+    .menu-grid {
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .icon {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        padding: var(--spacing-xl);
+    }
+    
+    .menu-item {
+        padding: var(--spacing-xl) var(--spacing-lg);
+    }
+}
+
+.home-button {
+    position: absolute;
+    top: 0; /* Menempel ke atas */
+    left: 0; /* Menempel ke kiri */
+    width: 30px; /* Ukuran kecil */
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none; /* Hilangkan garis bawah link */
+    padding: 5px; /* Tambahkan padding kecil agar tidak terlalu rapat ke tepi */
+}
+
+.home-button .icon {
+    width: 100%;
+    height: 100%;
+}
+
+.home-button .icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: #fff; /* Warna ikon, sesuaikan dengan tema */
+}
+
+header {
+    position: relative; /* Agar posisi absolut tombol bekerja */
+}
+
+
+/* Menyamakan gaya container icon agar konsisten */
+.menu-item .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 8px; /* Memberi jarak antara ikon dan teks */
+}
+
+/* Mengatur ukuran dan warna SVG agar seragam */
+.menu-item .icon svg {
+    width: 32px;  /* Sesuaikan dengan ukuran yang Anda inginkan */
+    height: 32px;
+    stroke: white; /* Sesuaikan warna stroke dengan tema Anda */
+    stroke-width: 2;
+}
+
+/* Memastikan teks berada di bawah ikon dengan rapi */
+.menu-item {
+    display: flex;
+    flex-direction: column; /* Membuat isi tombol bertumpuk vertikal */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+    text-decoration: none;
+    color: white;
+}

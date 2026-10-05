@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savoury Digital Factory - Advanced Control Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #001440;
+            --secondary: #0055cc;
+            --accent: #00b8f0;
+            --light: #f5f8ff;
+            --dark: #333;
+            --success: #45c958;
+            --warning: #f08c00;
+            --danger: #f03025;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --radius-sm: 0.25rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 1rem;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-md);
+        }
+        
+        .panel {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: var(--spacing-xl);
+            overflow: hidden;
+        }
+        
+        .panel-header {
+            background-color: var(--primary);
+            color: white;
+            padding: var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .panel-body {
+            padding: var(--spacing-lg);
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: var(--spacing-lg);
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: var(--spacing-md) var(--spacing-lg);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid #ddd;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(0, 184, 240, 0.2);
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+        }
+        
+        .color-preview {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .color-box {
+            width: 30px;
+            height: 30px;
+            border-radius: var(--radius-sm);
+            margin-right: var(--spacing-sm);
+            border: 1px solid #ddd;
+        }
+        
+        input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius-sm);
+            padding: 2px;
+        }
+        
+        .btn {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: none;
+            border-radius: var(--radius-md);
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        
+        .btn:hover {
+            background-color: #002a7a;
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+        }
+        
+        .btn-success:hover {
+            background-color: #3ab04a;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e07d00;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #d02015;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+        
+        .pattern-grid, .template-grid, .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+        
+        .pattern-item, .template-item, .icon-item {
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        
+        .pattern-item:hover, .template-item:hover, .icon-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .pattern-item.selected, .template-item.selected, .icon-item.selected {
+            border-color: var(--accent);
+        }
+        
+        .pattern-item img, .template-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+        
+        .icon-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+            background-color: #f5f5f5;
+        }
+        
+        .icon-item svg {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .preview-section {
+            margin-top: var(--spacing-xl);
+        }
+        
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .preview-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .preview-frame {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius-md);
+        }
+        
+        .code-section {
+            margin-top: var(--spacing-xl);
+        }
+        
+        textarea.code-output {
+            width: 100%;
+            height: 200px;
+            padding: var(--spacing-md);
+            border: 1px solid #ddd;
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            margin-top: var(--spacing-sm);
+        }
+        
+        .note {
+            margin-top: var(--spacing-sm);
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .button-editor {
+            margin-top: var(--spacing-lg);
+            border: 1px solid #ddd;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+        }
+        
+        .button-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-md);
+        }
+        
+        .button-item {
+            background-color: var(--accent);
+            color: white;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .button-item.selected {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+        
+        .button-editor-form {
+            margin-top: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid #eee;
+        }
+        
+        .grid-controls {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .grid-control {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: 1px solid #ddd;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+        
+        .grid-control.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .effect-preview {
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-md);
+            border: 1px solid #ddd;
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .effect-demo {
+            width: 150px;
+            height: 80px;
+            background-color: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-md);
+            font-weight: 500;
+        }
+        
+        .effect-options {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+        
+        .effect-option {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: 1px solid #ddd;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+        
+        .effect-option.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Icon library styles */
+        .icon-search-container {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .icon-search {
+            width: 100%;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid #ddd;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .icon-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .icon-category {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: 1px solid #ddd;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .icon-category.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .color-grid, .pattern-grid, .template-grid, .icon-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .preview-frame {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="panel">
+            <div class="panel-header">
+                <h1 class="panel-title">Savoury Digital Factory - Advanced Control Panel</h1>
+                <div>
+                    <button class="btn btn-success" id="preview-btn">Preview</button>
+                    <button class="btn" id="generate-btn">Generate Code</button>
+                </div>
+            </div>
+            
+            <div class="panel-body">
+                <div class="tabs">
+                    <div class="tab active" data-tab="general">General</div>
+                    <div class="tab" data-tab="buttons">Buttons</div>
+                    <div class="tab" data-tab="layout">Layout & Grid</div>
+                    <div class="tab" data-tab="background">Background</div>
+                    <div class="tab" data-tab="footer">Footer</div>
+                    <div class="tab" data-tab="pages">Pages</div>
+                    <div class="tab" data-tab="effects">Effects</div>
+                    <div class="tab" data-tab="templates">Templates</div>
+                    <div class="tab" data-tab="export">Export</div>
+                </div>
+                
+                <!-- General Tab -->
+                <div class="tab-content active" id="general-tab">
+                    <div class="form-group">
+                        <label class="form-label" for="site-title">Website Title</label>
+                        <input type="text" class="form-control" id="site-title" value="Savoury Digital Factory">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="footer-text">Footer Text</label>
+                        <input type="text" class="form-control" id="footer-text" value="www.savouryfactory.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Background Color</label>
+                        <div class="color-preview">
+                            <div class="color-box" id="bg-color-preview" style="background-color: #001440;"></div>
+                            <span id="bg-color-hex">#001440</span>
+                        </div>
+                        <input type="color" id="bg-color" value="#001440">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Logo</label>
+                        <input type="file" class="form-control" id="logo-upload" accept="image/*">
+                        <div style="margin-top: var(--spacing-sm);">
+                            <img src="images/savlogo.png" alt="Current Logo" style="max-height: 100px;">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Buttons Tab -->
+                <div class="tab-content" id="buttons-tab">
+                    <div class="button-controls">
+                        <button class="btn" id="add-button">Add Button</button>
+                        <button class="btn btn-danger" id="remove-button">Remove Button</button>
+                    </div>
+                    
+                    <div class="button-grid" id="button-grid">
+                        <!-- Buttons will be generated here -->
+                    </div>
+                    
+                    <div class="button-editor">
+                        <h3>Edit Selected Button</h3>
+                        <div class="button-editor-form">
+                            <div class="form-group">
+                                <label class="form-label" for="button-text">Button Text</label>
+                                <input type="text" class="form-control" id="button-text" placeholder="Enter button text">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Button Color</label>
+                                <div class="color-preview">
+                                    <div class="color-box" id="button-color-preview"></div>
+                                    <span id="button-color-hex"></span>
+                                </div>
+                                <input type="color" id="button-color">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="button-url">Button URL</label>
+                                <input type="text" class="form-control" id="button-url" placeholder="Enter button URL (e.g., https://example.com)">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Select Icon</label>
+                                <div class="icon-search-container">
+                                    <input type="text" class="icon-search" id="icon-search" placeholder="Search icons...">
+                                </div>
+                                <div class="icon-categories" id="icon-categories">
+                                    <!-- Categories will be generated here -->
+                                </div>
+                                <div class="icon-grid" id="icon-grid">
+                                    <!-- Icons will be generated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Layout Tab -->
+                <div class="tab-content" id="layout-tab">
+                    <div class="form-group">
+                        <label class="form-label">Grid Layout</label>
+                        <div class="grid-controls">
+                            <div class="grid-control active" data-grid="3x3">3x3</div>
+                            <div class="grid-control" data-grid="4x3">4x3</div>
+                            <div class="grid-control" data-grid="3x4">3x4</div>
+                            <div class="grid-control" data-grid="4x4">4x4</div>
+                            <div class="grid-control" data-grid="5x2">5x2</div>
+                            <div class="grid-control" data-grid="2x5">2x5</div>
+                            <div class="grid-control" data-grid="2x2">2x2</div>
+                            <div class="grid-control" data-grid="6x2">6x2</div>
+                            <div class="grid-control" data-grid="2x6">2x6</div>
+                            <div class="grid-control" data-grid="5x3">5x3</div>
+                            <div class="grid-control" data-grid="3x5">3x5</div>
+                            <div class="grid-control" data-grid="6x3">6x3</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Layout Type</label>
+                        <div class="layout-type-controls">
+                            <div class="layout-type-control active" data-layout-type="grid">
+                                <div class="layout-type-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                                </div>
+                                <span>Grid</span>
+                            </div>
+                            <div class="layout-type-control" data-layout-type="masonry">
+                                <div class="layout-type-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                                </div>
+                                <span>Masonry</span>
+                            </div>
+                            <div class="layout-type-control" data-layout-type="flex">
+                                <div class="layout-type-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                                </div>
+                                <span>Flex</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Button Spacing</label>
+                        <input type="range" class="form-control" id="button-spacing" min="5" max="30" value="16">
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                            <span>Compact</span>
+                            <span>Spacious</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Button Corner Radius</label>
+                        <input type="range" class="form-control" id="button-radius" min="0" max="30" value="10">
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                            <span>Square</span>
+                            <span>Rounded</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Advanced Spacing</label>
+                        <div class="spacing-controls">
+                            <div class="spacing-control">
+                                <label>Horizontal Gap</label>
+                                <input type="range" class="form-control" id="horizontal-gap" min="5" max="50" value="16">
+                                <div class="spacing-value"><span id="horizontal-gap-value">16</span>px</div>
+                            </div>
+                            <div class="spacing-control">
+                                <label>Vertical Gap</label>
+                                <input type="range" class="form-control" id="vertical-gap" min="5" max="50" value="16">
+                                <div class="spacing-value"><span id="vertical-gap-value">16</span>px</div>
+                            </div>
+                            <div class="spacing-control">
+                                <label>Button Padding</label>
+                                <input type="range" class="form-control" id="button-padding" min="5" max="40" value="16">
+                                <div class="spacing-value"><span id="button-padding-value">16</span>px</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Responsive Behavior</label>
+                        <select class="form-control" id="responsive-behavior">
+                            <option value="auto">Auto-adjust (Recommended)</option>
+                            <option value="fixed">Fixed Layout</option>
+                            <option value="stack">Stack on Mobile</option>
+                        </select>
+                        <p class="form-help">Auto-adjust will optimize the layout for different screen sizes.</p>
+                    </div>
+                </div>
+                
+                <!-- Background Tab -->
+                <div class="tab-content" id="background-tab">
+                    <div class="form-group">
+                        <label class="form-label">Background Type</label>
+                        <select class="form-control" id="bg-type">
+                            <option value="pattern">Digital Pattern</option>
+                            <option value="full-image">Full Background Image</option>
+                            <option value="top-image">Top Background Image</option>
+                            <option value="custom">Custom Background</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Pattern Categories</label>
+                        <div class="pattern-categories" id="pattern-categories">
+                            <div class="pattern-category active" data-category="all">All Patterns</div>
+                            <div class="pattern-category" data-category="abstract">Abstract</div>
+                            <div class="pattern-category" data-category="tech">Technology</div>
+                            <div class="pattern-category" data-category="gradient">Gradients</div>
+                            <div class="pattern-category" data-category="minimal">Minimal</div>
+                        </div>
+                    </div>
+                    
+                    <div id="pattern-selector" class="form-group">
+                        <label class="form-label">Select Digital Pattern</label>
+                        <div class="pattern-grid" id="pattern-grid">
+                            <!-- Patterns will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div id="image-upload" class="form-group" style="display: none;">
+                        <label class="form-label">Upload Background Image</label>
+                        <input type="file" class="form-control" id="bg-image-upload" accept="image/*">
+                        <p class="form-help">Upload your own background image. Recommended size: 1920x1080px or larger.</p>
+                        
+                        <div id="custom-image-preview" style="margin-top: var(--spacing-md); display: none;">
+                            <label class="form-label">Preview</label>
+                            <div style="width: 100%; height: 150px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid #ddd;">
+                                <img id="custom-image-preview-img" src="" alt="Custom background preview" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Background Opacity</label>
+                        <input type="range" class="form-control" id="bg-opacity" min="0" max="100" value="50">
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                            <span>Transparent</span>
+                            <span>Solid</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Background Color</label>
+                        <div class="color-preview">
+                            <div class="color-box" id="bg-color-preview" style="background-color: #001440;"></div>
+                            <span id="bg-color-hex">#001440</span>
+                        </div>
+                        <input type="color" id="bg-color" value="#001440">
+                        <p class="form-help">This color will be visible through the pattern based on opacity.</p>
+                    </div>
+                </div>
+                
+                <!-- Footer Tab -->
+                <div class="tab-content" id="footer-tab">
+                    <div class="form-group">
+                        <label class="form-label">Footer Style</label>
+                        <select class="form-control" id="footer-style">
+                            <option value="simple">Simple</option>
+                            <option value="with-links">With Links</option>
+                            <option value="with-social">With Social Icons</option>
+                            <option value="two-column">Two Column</option>
+                            <option value="multi-column">Multi Column</option>
+                            <option value="modern">Modern</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Footer Text</label>
+                        <input type="text" class="form-control" id="footer-text-input" value="www.savouryfactory.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Footer Preview</label>
+                        <div id="footer-preview" style="border: 1px solid #ddd; border-radius: var(--radius-md); padding: var(--spacing-md); background-color: var(--primary); color: white; margin-top: var(--spacing-sm);">
+                            <!-- Footer preview will be rendered here -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Footer Background</label>
+                        <div class="color-preview">
+                            <div class="color-box" id="footer-bg-color-preview" style="background-color: #001440;"></div>
+                            <span id="footer-bg-color-hex">#001440</span>
+                        </div>
+                        <input type="color" id="footer-bg-color" value="#001440">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Footer Text Color</label>
+                        <div class="color-preview">
+                            <div class="color-box" id="footer-text-color-preview" style="background-color: #ffffff;"></div>
+                            <span id="footer-text-color-hex">#ffffff</span>
+                        </div>
+                        <input type="color" id="footer-text-color" value="#ffffff">
+                    </div>
+                </div>
+                
+                <!-- Pages Tab -->
+                <div class="tab-content" id="pages-tab">
+                    <div class="form-group">
+                        <label class="form-label">Page Management</label>
+                        <p class="form-help">Create and manage multiple pages for your website. Each page can have its own buttons and content.</p>
+                        
+                        <div class="page-controls" style="display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                            <button class="btn btn-primary" id="add-page-btn">Add New Page</button>
+                            <button class="btn btn-danger" id="delete-page-btn">Delete Current Page</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Current Page</label>
+                        <select class="form-control" id="current-page-select">
+                            <option value="index">Home</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Page Title</label>
+                        <input type="text" class="form-control" id="page-title-input" value="Home">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Page Preview</label>
+                        <div id="page-preview" style="border: 1px solid #ddd; border-radius: var(--radius-md); padding: var(--spacing-md); background-color: #f9f9f9; margin-top: var(--spacing-sm);">
+                            <h3 id="page-preview-title">Home</h3>
+                            <p style="margin-top: var(--spacing-sm);">This page contains <span id="page-button-count">0</span> buttons.</p>
+                            <div style="margin-top: var(--spacing-md);">
+                                <p style="font-size: 0.9rem; color: #666;">Page Navigation:</p>
+                                <div id="page-navigation-preview" style="display: flex; flex-wrap: wrap; gap: var(--spacing-sm); margin-top: var(--spacing-sm);">
+                                    <!-- Page navigation will be rendered here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Button Configuration</label>
+                        <p class="form-help">Configure buttons for the current page. Changes will be saved automatically when switching pages.</p>
+                        <div style="margin-top: var(--spacing-sm);">
+                            <p>Use the <strong>Buttons</strong> tab to add, remove, and configure buttons for this page.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Effects Tab -->
+                <div class="tab-content" id="effects-tab">
+                    <div class="form-group">
+                        <label class="form-label">Button Hover Effect</label>
+                        <div class="effect-preview">
+                            <div class="effect-demo" id="hover-demo">
+                                Hover Me
+                            </div>
+                            <div class="effect-options">
+                                <div class="effect-option active" data-effect="lift">Lift</div>
+                                <div class="effect-option" data-effect="glow">Glow</div>
+                                <div class="effect-option" data-effect="scale">Scale</div>
+                                <div class="effect-option" data-effect="border">Border</div>
+                                <div class="effect-option" data-effect="none">None</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Button Click Effect</label>
+                        <div class="effect-preview">
+                            <div class="effect-demo" id="click-demo">
+                                Click Me
+                            </div>
+                            <div class="effect-options">
+                                <div class="effect-option active" data-effect="press">Press</div>
+                                <div class="effect-option" data-effect="ripple">Ripple</div>
+                                <div class="effect-option" data-effect="flash">Flash</div>
+                                <div class="effect-option" data-effect="none">None</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Templates Tab -->
+                <div class="tab-content" id="templates-tab">
+                    <div class="form-group">
+                        <label class="form-label">Select Template</label>
+                        <div class="template-grid" id="template-grid">
+                            <!-- Templates will be generated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Template Preview</label>
+                        <div id="template-preview" style="border: 1px solid #ddd; border-radius: var(--radius-md); padding: var(--spacing-md); background-color: #f9f9f9;">
+                            <h3 id="template-name">Default</h3>
+                            <p id="template-description">The default blue digital theme</p>
+                            <div style="margin-top: var(--spacing-md);">
+                                <div style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-sm);">
+                                    <div style="flex: 1;">
+                                        <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Primary Color</label>
+                                        <div id="template-primary" style="height: 30px; background-color: #001440; border-radius: var(--radius-sm);"></div>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Secondary Color</label>
+                                        <div id="template-secondary" style="height: 30px; background-color: #0055cc; border-radius: var(--radius-sm);"></div>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Accent Color</label>
+                                        <div id="template-accent" style="height: 30px; background-color: #00b8f0; border-radius: var(--radius-sm);"></div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: var(--spacing-md);">
+                                    <p style="font-size: 0.9rem; color: #666;">Button Style Preview:</p>
+                                    <div style="display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-sm);">
+                                        <div id="template-button-preview" style="padding: 8px 16px; background-color: #00b8f0; color: white; border-radius: 8px; font-weight: 500; text-align: center;">
+                                            Button Example
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Export Tab -->
+                <div class="tab-content" id="export-tab">
+                    <div class="form-group">
+                        <label class="form-label">Generated CSS</label>
+                        <textarea class="code-output" id="css-output" readonly></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Generated HTML</label>
+                        <textarea class="code-output" id="html-output" readonly></textarea>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button class="btn" id="download-css">Download CSS</button>
+                        <button class="btn" id="download-html">Download HTML</button>
+                        <button class="btn btn-success" id="apply-changes">Apply Changes to Website</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="preview-section">
+            <div class="preview-header">
+                <h2 class="preview-title">Live Preview</h2>
+                <button class="btn" id="refresh-preview">Refresh Preview</button>
+            </div>
+            <iframe src="index.html" class="preview-frame" id="preview-frame"></iframe>
+        </div>
+    </div>
+    
+    <!-- Include the icon library -->
+    <script src="icon-library.js"></script>
+    
+    <!-- Include the template library -->
+    <script src="template-library.js"></script>
+    
+    <!-- Include the footer library -->
+    <script src="footer-library.js"></script>
+    
+    <!-- Include the page manager -->
+    <script src="page-manager.js"></script>
+    
+    <!-- Include the footer preview -->
+    <script src="footer-preview.js"></script>
+    
+    <!-- Include the layout manager -->
+    <script src="layout-manager.js"></script>
+    
+    <!-- Include the layout controls -->
+    <script src="layout-controls.js"></script>
+    
+    <!-- Include the background manager -->
+    <script src="background-manager.js"></script>
+    
+    <!-- Include the background controls -->
+    <script src="background-controls.js"></script>
+    
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+                
+                // Update preview if switching to a tab that affects appearance
+                if (['general', 'buttons', 'layout', 'background', 'effects', 'templates'].includes(tab.dataset.tab)) {
+                    updatePreview();
+                }
+            });
+        });
+        
+        // Background type switching
+        document.getElementById('bg-type').addEventListener('change', function() {
+            const patternSelector = document.getElementById('pattern-selector');
+            const imageUpload = document.getElementById('image-upload');
+            
+            if (this.value === 'pattern') {
+                patternSelector.style.display = 'block';
+                imageUpload.style.display = 'none';
+            } else {
+                patternSelector.style.display = 'none';
+                imageUpload.style.display = 'block';
+            }
+            
+            updatePreview();
+        });
+        
+        // Pattern selection
+        document.querySelectorAll('.pattern-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.pattern-item').forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+                updatePreview();
+            });
+        });
+        
+        // Template selection
+        function initializeTemplates() {
+            const templateGrid = document.getElementById('template-grid');
+            templateGrid.innerHTML = '';
+            
+            // Get all templates from the library
+            const templates = templateLibrary.getAllTemplates();
+            
+            // Create template items
+            templates.forEach(template => {
+                const templateItem = document.createElement('div');
+                templateItem.className = 'template-item';
+                templateItem.dataset.template = template.id;
+                
+                if (template.id === 'default') {
+                    templateItem.classList.add('selected');
+                }
+                
+                // Create color preview
+                const colorPreview = document.createElement('div');
+                colorPreview.style.height = '80px';
+                colorPreview.style.background = `linear-gradient(135deg, ${template.colors.primary} 0%, ${template.colors.secondary} 50%, ${template.colors.accent} 100%)`;
+                colorPreview.style.borderRadius = 'var(--radius-sm) var(--radius-sm) 0 0';
+                
+                // Create template name
+                const templateName = document.createElement('p');
+                templateName.style.textAlign = 'center';
+                templateName.style.padding = '8px';
+                templateName.style.margin = '0';
+                templateName.style.fontWeight = '500';
+                templateName.textContent = template.name;
+                
+                // Add elements to template item
+                templateItem.appendChild(colorPreview);
+                templateItem.appendChild(templateName);
+                
+                // Add click event
+                templateItem.addEventListener('click', () => {
+                    document.querySelectorAll('.template-item').forEach(i => i.classList.remove('selected'));
+                    templateItem.classList.add('selected');
+                    updateTemplatePreview(template.id);
+                    updatePreview();
+                });
+                
+                templateGrid.appendChild(templateItem);
+            });
+            
+            // Initialize template preview
+            updateTemplatePreview('default');
+        }
+        
+        // Update template preview
+        function updateTemplatePreview(templateId) {
+            const template = templateLibrary.getTemplate(templateId);
+            
+            // Update template info
+            document.getElementById('template-name').textContent = template.name;
+            document.getElementById('template-description').textContent = template.description;
+            
+            // Update color previews
+            document.getElementById('template-primary').style.backgroundColor = template.colors.primary;
+            document.getElementById('template-secondary').style.backgroundColor = template.colors.secondary;
+            document.getElementById('template-accent').style.backgroundColor = template.colors.accent;
+            
+            // Update button preview
+            const buttonPreview = document.getElementById('template-button-preview');
+            buttonPreview.style.backgroundColor = template.colors.accent;
+            buttonPreview.style.borderRadius = template.styles.buttonRadius;
+        }
+        
+        // Apply selected template to generated code
+        function applySelectedTemplate(css) {
+            const selectedTemplate = document.querySelector('.template-item.selected');
+            if (selectedTemplate) {
+                return templateLibrary.applyTemplateToCSS(selectedTemplate.dataset.template, css);
+            }
+            return css;
+        }
+        
+        // Grid layout selection
+        document.querySelectorAll('.grid-control').forEach(control => {
+            control.addEventListener('click', () => {
+                document.querySelectorAll('.grid-control').forEach(c => c.classList.remove('active'));
+                control.classList.add('active');
+                updatePreview();
+            });
+        });
+        
+        // Effect selection
+        document.querySelectorAll('.effect-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const parent = option.parentElement;
+                parent.querySelectorAll('.effect-option').forEach(o => o.classList.remove('active'));
+                option.classList.add('active');
+                updatePreview();
+            });
+        });
+        
+        // Color picker updates
+        document.getElementById('bg-color').addEventListener('input', function() {
+            document.getElementById('bg-color-preview').style.backgroundColor = this.value;
+            document.getElementById('bg-color-hex').textContent = this.value;
+            updatePreview();
+        });
+        
+        // Button spacing and radius updates
+        document.getElementById('button-spacing').addEventListener('input', updatePreview);
+        document.getElementById('button-radius').addEventListener('input', updatePreview);
+        document.getElementById('bg-opacity').addEventListener('input', updatePreview);
+        
+        // Site title and footer text updates
+        document.getElementById('site-title').addEventListener('input', updatePreview);
+        document.getElementById('footer-text').addEventListener('input', updatePreview);
+        
+        // Initialize icon categories
+        function initializeIconCategories() {
+            const categoriesContainer = document.getElementById('icon-categories');
+            categoriesContainer.innerHTML = '';
+            
+            // Add "All" category
+            const allCategory = document.createElement('div');
+            allCategory.className = 'icon-category active';
+            allCategory.dataset.category = 'all';
+            allCategory.textContent = 'All';
+            allCategory.addEventListener('click', () => {
+                document.querySelectorAll('.icon-category').forEach(c => c.classList.remove('active'));
+                allCategory.classList.add('active');
+                populateIcons('all');
+            });
+            categoriesContainer.appendChild(allCategory);
+            
+            // Add other categories
+            iconLibrary.getCategories().forEach(category => {
+                const categoryElement = document.createElement('div');
+                categoryElement.className = 'icon-category';
+                categoryElement.dataset.category = category;
+                categoryElement.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                categoryElement.addEventListener('click', () => {
+                    document.querySelectorAll('.icon-category').forEach(c => c.classList.remove('active'));
+                    categoryElement.classList.add('active');
+                    populateIcons(category);
+                });
+                categoriesContainer.appendChild(categoryElement);
+            });
+        }
+        
+        // Populate icons based on category or search
+        function populateIcons(category, searchQuery = '') {
+            const iconGrid = document.getElementById('icon-grid');
+            iconGrid.innerHTML = '';
+            
+            let icons = [];
+            
+            if (searchQuery) {
+                icons = iconLibrary.search(searchQuery);
+            } else if (category === 'all') {
+                icons = iconLibrary.allIcons;
+            } else {
+                icons = iconLibrary.getCategory(category);
+            }
+            
+            icons.forEach(icon => {
+                const iconItem = document.createElement('div');
+                iconItem.className = 'icon-item';
+                iconItem.dataset.name = icon.name;
+                iconItem.innerHTML = icon.svg;
+                
+                iconItem.addEventListener('click', () => {
+                    document.querySelectorAll('.icon-item').forEach(i => i.classList.remove('selected'));
+                    iconItem.classList.add('selected');
+                    updatePreview();
+                });
+                
+                iconGrid.appendChild(iconItem);
+            });
+        }
+        
+        // Icon search functionality
+        document.getElementById('icon-search').addEventListener('input', function() {
+            const searchQuery = this.value.trim();
+            if (searchQuery) {
+                document.querySelectorAll('.icon-category').forEach(c => c.classList.remove('active'));
+                populateIcons(null, searchQuery);
+            } else {
+                document.querySelector('.icon-category[data-category="all"]').classList.add('active');
+                populateIcons('all');
+            }
+        });
+        
+        // Generate buttons in the button grid
+        function generateButtons() {
+            const buttonGrid = document.getElementById('button-grid');
+            buttonGrid.innerHTML = '';
+            
+            const buttonData = [
+                { text: 'e-WO (ESS)', color: '#f03025', url: '#' },
+                { text: 'General Online Form', color: '#00b8f0', url: '#' },
+                { text: 'Savoury Central Data', color: '#f038b8', url: '#' },
+                { text: 'BuildApp', color: '#45c958', url: '#' },
+                { text: 'Logbook Online', color: '#50bef0', url: '#' },
+                { text: 'Equipment Check', color: '#f08c00', url: '#' },
+                { text: 'SPC', color: '#e040d0', url: '#' },
+                { text: 'E-Learning', color: '#3080e0', url: '#' },
+                { text: 'E-PTW', color: '#b0c030', url: '#' }
+            ];
+            
+            buttonData.forEach((button, index) => {
+                const buttonItem = document.createElement('div');
+                buttonItem.className = 'button-item';
+                buttonItem.dataset.index = index;
+                buttonItem.dataset.url = button.url || '#';
+                buttonItem.style.backgroundColor = button.color;
+                buttonItem.textContent = button.text;
+                
+                buttonItem.addEventListener('click', () => {
+                    document.querySelectorAll('.button-item').forEach(b => b.classList.remove('selected'));
+                    buttonItem.classList.add('selected');
+                    
+                    // Update button editor form
+                    document.getElementById('button-text').value = button.text;
+                    document.getElementById('button-color').value = button.color;
+                    document.getElementById('button-color-preview').style.backgroundColor = button.color;
+                    document.getElementById('button-color-hex').textContent = button.color;
+                    document.getElementById('button-url').value = buttonItem.dataset.url;
+                });
+                
+                buttonGrid.appendChild(buttonItem);
+            });
+            
+            updatePreview();
+        }
+        
+        // Generate CSS code
+        function generateCssCode() {
+            const bgColor = document.getElementById('bg-color').value;
+            const buttonSpacing = document.getElementById('button-spacing').value;
+            const buttonRadius = document.getElementById('button-radius').value;
+            const bgOpacity = document.getElementById('bg-opacity').value / 100;
+            const footerStyle = document.getElementById('footer-style').value;
+            const footerBgColor = document.getElementById('footer-bg-color').value;
+            const footerTextColor = document.getElementById('footer-text-color').value;
+            
+            let hoverEffect = '';
+            document.querySelectorAll('#effects-tab .effect-options')[0].querySelectorAll('.effect-option').forEach(option => {
+                if (option.classList.contains('active')) {
+                    hoverEffect = option.dataset.effect;
+                }
+            });
+            
+            let clickEffect = '';
+            document.querySelectorAll('#effects-tab .effect-options')[1].querySelectorAll('.effect-option').forEach(option => {
+                if (option.classList.contains('active')) {
+                    clickEffect = option.dataset.effect;
+                }
+            });
+            
+            // Generate CSS based on selected options
+            let css = `/* Generated CSS for Savoury Digital Factory */
+:root {
+    /* Colors - eye-catching but slightly less bright */
+    --primary: ${bgColor};
+`;
+            
+            // Add button colors
+            document.querySelectorAll('.button-item').forEach((button, index) => {
+                css += `    --item${index + 1}: ${button.style.backgroundColor};\n`;
+            });
+            
+            css += `    --white: #ffffff;
+    
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: ${buttonSpacing / 16}rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    
+    /* Border radius */
+    --radius-sm: 0.5rem;
+    --radius-md: ${buttonRadius / 16}rem;
+    --radius-lg: 1.5rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--primary);
+    color: var(--white);
+    min-height: 100vh;
+    position: relative;
+}
+
+${backgroundManager.generateBackgroundCSS()}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+/* Header styles */
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+}
+
+.logo-container {
+    margin-bottom: var(--spacing-md);
+}
+
+.logo {
+    width: 80px;
+    height: auto;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Navigation styles */
+.page-navigation {
+    margin-top: var(--spacing-md);
+    width: 100%;
+}
+
+.nav-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    list-style: none;
+    padding: 0;
+}
+
+.nav-item {
+    margin: 0;
+}
+
+.nav-link {
+    display: block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.nav-item.active .nav-link {
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Menu grid styles */
+${layoutManager.generateLayoutCSS()}
+
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: #fff; /* White text for better contrast on bright backgrounds */
+    font-weight: 600;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover effect */
+.menu-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Click effect */
+.menu-item:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Ripple effect */
+.menu-item::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+.menu-item:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
+}
+
+.icon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: #fff; /* White stroke for better visibility */
+}
+
+/* Menu item colors */
+`;
+            
+            // Add button color classes
+            document.querySelectorAll('.button-item').forEach((button, index) => {
+                css += `.item${index + 1} {
+    background-color: var(--item${index + 1});
+}
+
+`;
+            });
+            
+            // Add footer CSS from library
+            css += footerLibrary.getFooterCSS(footerStyle);
+            
+            // Add custom footer styles
+            css += `
+/* Custom footer styles */
+footer {
+    background-color: ${footerBgColor};
+    color: ${footerTextColor};
+}
+
+footer a, footer .footer-link, footer .social-icon {
+    color: ${footerTextColor};
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+    .menu-item {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+    
+    .icon {
+        width: 24px;
+        height: 24px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (min-width: 576px) {
+    .logo {
+        width: 100px;
+    }
+}
+
+@media (min-width: 768px) {
+    .menu-item {
+        padding: var(--spacing-lg);
+    }
+    
+    .icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    .logo {
+        width: 120px;
+    }
+}
+
+@media (min-width: 992px) {
+    header {
+        flex-direction: row;
+        justify-content: center;
+        gap: var(--spacing-lg);
+    }
+    
+    .logo-container {
+        margin-bottom: 0;
+    }
+    
+    .menu-grid {
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .icon {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        padding: var(--spacing-xl);
+    }
+    
+    .menu-item {
+        padding: var(--spacing-xl) var(--spacing-lg);
+    }
+}`;
+            
+            // Apply selected template to CSS
+            return applySelectedTemplate(css);
+        }
+        
+        // Generate HTML code
+        function generateHtmlCode() {
+            const siteTitle = document.getElementById('site-title').value;
+            const footerText = document.getElementById('footer-text-input').value;
+            const footerStyle = document.getElementById('footer-style').value;
+            const currentPage = pageManager.getCurrentPage();
+            
+            let gridLayout = '3x3';
+            document.querySelectorAll('.grid-control').forEach(control => {
+                if (control.classList.contains('active')) {
+                    gridLayout = control.dataset.grid;
+                }
+            });
+            
+            // Get footer HTML from library
+            const footerHTML = footerLibrary.generateFooterHTML(footerStyle, footerText);
+            
+            // Generate navigation links for all pages
+            let navigationLinks = '';
+            if (pageManager.getAllPages().length > 1) {
+                navigationLinks = `
+        <nav class="page-navigation">
+            <ul class="nav-list">`;
+                
+                pageManager.getAllPages().forEach(page => {
+                    const isActive = page.id === currentPage.id;
+                    navigationLinks += `
+                <li class="nav-item${isActive ? ' active' : ''}">
+                    <a href="${page.id === 'index' ? 'index.html' : page.id + '.html'}" class="nav-link">${page.title}</a>
+                </li>`;
+                });
+                
+                navigationLinks += `
+            </ul>
+        </nav>`;
+            }
+            
+            // Generate HTML based on selected options
+            let html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${currentPage.title} - ${siteTitle}</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="images/savlogo.png" alt="${siteTitle} Logo" class="logo">
+            </div>
+            <h1>${currentPage.title}</h1>${navigationLinks}
+        </header>
+        
+        <main class="menu-grid">
+`;
+            
+            // Add buttons
+            document.querySelectorAll('.button-item').forEach((button, index) => {
+                const buttonUrl = button.dataset.url || '#';
+                html += `            <a href="${buttonUrl}" class="menu-item item${index + 1}">
+                <div class="icon">
+                    ${document.querySelector('.icon-item.selected')?.innerHTML || '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94"></path></svg>'}
+                </div>
+                <span>${button.textContent}</span>
+            </a>
+            
+`;
+            });
+            
+            html += `        </main>
+        
+        ${footerHTML}
+    </div>
+</body>
+</html>`;
+            
+            return html;
+        }
+        
+        // Update preview iframe with current settings
+        function updatePreview() {
+            // Generate CSS and HTML
+            const css = generateCssCode();
+            const html = generateHtmlCode();
+            
+            // Update textareas in export tab
+            document.getElementById('css-output').value = css;
+            document.getElementById('html-output').value = html;
+            
+            // Create a blob with the HTML content
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            // Update the iframe src
+            const iframe = document.getElementById('preview-frame');
+            iframe.src = url;
+            
+            // Clean up the URL object after the iframe loads
+            iframe.onload = () => {
+                URL.revokeObjectURL(url);
+                
+                // Apply CSS to the iframe
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const styleElement = iframeDoc.createElement('style');
+                styleElement.textContent = css;
+                iframeDoc.head.appendChild(styleElement);
+            };
+        }
+        
+        // Button URL change
+        document.getElementById('button-url').addEventListener('input', function() {
+            const selectedButton = document.querySelector('.button-item.selected');
+            if (selectedButton) {
+                selectedButton.dataset.url = this.value;
+                updatePreview();
+            }
+        });
+        
+        // Button color change
+        document.getElementById('button-color').addEventListener('input', function() {
+            const selectedButton = document.querySelector('.button-item.selected');
+            if (selectedButton) {
+                selectedButton.style.backgroundColor = this.value;
+                document.getElementById('button-color-preview').style.backgroundColor = this.value;
+                document.getElementById('button-color-hex').textContent = this.value;
+                updatePreview();
+            }
+        });
+        
+        // Button text change
+        document.getElementById('button-text').addEventListener('input', function() {
+            const selectedButton = document.querySelector('.button-item.selected');
+            if (selectedButton) {
+                selectedButton.textContent = this.value;
+                updatePreview();
+            }
+        });
+        
+        // Add button
+        document.getElementById('add-button').addEventListener('click', () => {
+            const buttonGrid = document.getElementById('button-grid');
+            const newIndex = buttonGrid.children.length + 1;
+            
+            const buttonItem = document.createElement('div');
+            buttonItem.className = 'button-item';
+            buttonItem.dataset.index = newIndex - 1;
+            buttonItem.dataset.url = '#';
+            buttonItem.style.backgroundColor = '#808080';
+            buttonItem.textContent = `New Button ${newIndex}`;
+            
+            buttonItem.addEventListener('click', () => {
+                document.querySelectorAll('.button-item').forEach(b => b.classList.remove('selected'));
+                buttonItem.classList.add('selected');
+                
+                document.getElementById('button-text').value = buttonItem.textContent;
+                document.getElementById('button-color').value = '#808080';
+                document.getElementById('button-color-preview').style.backgroundColor = '#808080';
+                document.getElementById('button-color-hex').textContent = '#808080';
+                document.getElementById('button-url').value = buttonItem.dataset.url;
+            });
+            
+            buttonGrid.appendChild(buttonItem);
+            updatePreview();
+        });
+        
+        // Remove button
+        document.getElementById('remove-button').addEventListener('click', () => {
+            const selectedButton = document.querySelector('.button-item.selected');
+            if (selectedButton && document.querySelectorAll('.button-item').length > 1) {
+                selectedButton.remove();
+                updatePreview();
+            } else {
+                alert('You must have at least one button.');
+            }
+        });
+        
+        // Hover effect demo
+        const hoverDemo = document.getElementById('hover-demo');
+        document.querySelectorAll('#effects-tab .effect-options')[0].querySelectorAll('.effect-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('#effects-tab .effect-options')[0].querySelectorAll('.effect-option').forEach(o => o.classList.remove('active'));
+                option.classList.add('active');
+                hoverDemo.className = 'effect-demo';
+                hoverDemo.classList.add(option.dataset.effect);
+                updatePreview();
+            });
+        });
+        
+        // Click effect demo
+        const clickDemo = document.getElementById('click-demo');
+        clickDemo.addEventListener('click', () => {
+            const activeEffect = document.querySelectorAll('#effects-tab .effect-options')[1].querySelector('.effect-option.active').dataset.effect;
+            clickDemo.className = 'effect-demo';
+            clickDemo.classList.add(activeEffect);
+            setTimeout(() => {
+                clickDemo.classList.remove(activeEffect);
+            }, 500);
+        });
+        
+        // Preview button
+        document.getElementById('preview-btn').addEventListener('click', updatePreview);
+        
+        // Refresh preview button
+        document.getElementById('refresh-preview').addEventListener('click', updatePreview);
+        
+        // Generate code button
+        document.getElementById('generate-btn').addEventListener('click', () => {
+            // Save current buttons to current page
+            pageManager.saveCurrentButtons();
+            
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('.tab[data-tab="export"]').classList.add('active');
+            document.getElementById('export-tab').classList.add('active');
+            
+            // Generate CSS
+            const css = generateCssCode();
+            
+            // Generate HTML for all pages
+            const pages = pageManager.generateAllPages(generateHtmlCode, generateCssCode);
+            
+            // Display in export tab
+            const exportTab = document.getElementById('export-tab');
+            
+            let exportContent = `
+                <div class="form-group">
+                    <label class="form-label">Generated Files</label>
+                    <div class="export-files">
+                        <div class="export-file">
+                            <h3>styles.css</h3>
+                            <textarea id="css-output" class="form-control code-textarea" rows="10">${css}</textarea>
+                        </div>
+            `;
+            
+            // Add HTML files
+            Object.keys(pages).forEach(pageId => {
+                const page = pageManager.getPage(pageId);
+                const fileName = pageId === 'index' ? 'index.html' : pageId + '.html';
+                
+                exportContent += `
+                        <div class="export-file">
+                            <h3>${fileName}</h3>
+                            <textarea id="html-output-${pageId}" class="form-control code-textarea" rows="10">${pages[pageId].html}</textarea>
+                        </div>
+                `;
+            });
+            
+            exportContent += `
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button class="btn btn-primary" id="apply-changes">Apply Changes</button>
+                </div>
+            `;
+            
+            exportTab.innerHTML = exportContent;
+            
+            // Apply changes button
+            document.getElementById('apply-changes').addEventListener('click', () => {
+                alert('Changes prepared! Click OK to apply them to the website files.');
+                // The actual file writing will be handled by the agent
+            });
+        });
+        
+        // Apply changes button
+        document.getElementById('apply-changes').addEventListener('click', () => {
+            // Save current buttons to current page
+            pageManager.saveCurrentButtons();
+            
+            // Generate CSS
+            const css = generateCssCode();
+            
+            // Generate HTML for all pages
+            const pages = pageManager.generateAllPages(generateHtmlCode, generateCssCode);
+            
+            alert('Changes prepared! Click OK to apply them to the website files.');
+            // The actual file writing will be handled by the agent
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            generateButtons();
+            initializeIconCategories();
+            populateIcons('all');
+            initializeTemplates();
+            initializeFooterPreview();
+            initializePageManager();
+            initializeLayoutControls();
+            initializeBackgroundControls();
+            updatePreview();
+        });
+        
+        // Initialize page manager
+        function initializePageManager() {
+            const addPageBtn = document.getElementById('add-page-btn');
+            const deletePageBtn = document.getElementById('delete-page-btn');
+            const currentPageSelect = document.getElementById('current-page-select');
+            const pageTitleInput = document.getElementById('page-title-input');
+            const pageButtonCount = document.getElementById('page-button-count');
+            const pageNavigationPreview = document.getElementById('page-navigation-preview');
+            
+            // Update page preview
+            function updatePagePreview() {
+                const currentPage = pageManager.getCurrentPage();
+                document.getElementById('page-preview-title').textContent = currentPage.title;
+                
+                // Update button count
+                const buttonCount = document.querySelectorAll('.button-item').length;
+                pageButtonCount.textContent = buttonCount;
+                
+                // Update navigation preview
+                pageNavigationPreview.innerHTML = '';
+                pageManager.getAllPages().forEach(page => {
+                    const navButton = document.createElement('div');
+                    navButton.style.padding = '8px 12px';
+                    navButton.style.backgroundColor = page.id === currentPage.id ? '#0055cc' : '#e0e0e0';
+                    navButton.style.color = page.id === currentPage.id ? 'white' : 'black';
+                    navButton.style.borderRadius = '4px';
+                    navButton.style.fontSize = '0.9rem';
+                    navButton.textContent = page.title;
+                    pageNavigationPreview.appendChild(navButton);
+                });
+            }
+            
+            // Update page select dropdown
+            function updatePageSelect() {
+                currentPageSelect.innerHTML = '';
+                pageManager.getAllPages().forEach(page => {
+                    const option = document.createElement('option');
+                    option.value = page.id;
+                    option.textContent = page.title + (page.isHome ? ' (Home)' : '');
+                    currentPageSelect.appendChild(option);
+                });
+                currentPageSelect.value = pageManager.currentPageId;
+            }
+            
+            // Add page button click
+            addPageBtn.addEventListener('click', () => {
+                // Save current buttons to current page
+                pageManager.saveCurrentButtons();
+                
+                // Prompt for new page title
+                const title = prompt('Enter new page title:');
+                if (title) {
+                    const result = pageManager.addPage(title);
+                    if (result.success) {
+                        // Update UI
+                        updatePageSelect();
+                        pageTitleInput.value = title;
+                        
+                        // Clear buttons for new page
+                        const buttonGrid = document.getElementById('button-grid');
+                        buttonGrid.innerHTML = '';
+                        
+                        // Add default button
+                        const buttonItem = document.createElement('div');
+                        buttonItem.className = 'button-item';
+                        buttonItem.dataset.index = 0;
+                        buttonItem.dataset.url = '#';
+                        buttonItem.style.backgroundColor = '#808080';
+                        buttonItem.textContent = 'New Button';
+                        
+                        buttonItem.addEventListener('click', () => {
+                            document.querySelectorAll('.button-item').forEach(b => b.classList.remove('selected'));
+                            buttonItem.classList.add('selected');
+                            
+                            document.getElementById('button-text').value = buttonItem.textContent;
+                            document.getElementById('button-color').value = '#808080';
+                            document.getElementById('button-color-preview').style.backgroundColor = '#808080';
+                            document.getElementById('button-color-hex').textContent = '#808080';
+                            document.getElementById('button-url').value = buttonItem.dataset.url;
+                        });
+                        
+                        buttonGrid.appendChild(buttonItem);
+                        
+                        // Update preview
+                        updatePagePreview();
+                        updatePreview();
+                    } else {
+                        alert(result.message);
+                    }
+                }
+            });
+            
+            // Delete page button click
+            deletePageBtn.addEventListener('click', () => {
+                const currentPage = pageManager.getCurrentPage();
+                if (currentPage.isHome) {
+                    alert('Cannot delete the home page');
+                    return;
+                }
+                
+                if (confirm(`Are you sure you want to delete the page "${currentPage.title}"?`)) {
+                    const result = pageManager.deletePage(currentPage.id);
+                    if (result.success) {
+                        // Update UI
+                        updatePageSelect();
+                        
+                        // Load home page buttons
+                        const homePage = pageManager.getCurrentPage(); // Now points to home
+                        pageTitleInput.value = homePage.title;
+                        
+                        // Clear buttons
+                        const buttonGrid = document.getElementById('button-grid');
+                        buttonGrid.innerHTML = '';
+                        
+                        // Add home page buttons
+                        homePage.buttons.forEach((buttonInfo, index) => {
+                            const buttonItem = document.createElement('div');
+                            buttonItem.className = 'button-item';
+                            buttonItem.dataset.index = index;
+                            buttonItem.dataset.url = buttonInfo.url;
+                            buttonItem.style.backgroundColor = buttonInfo.color;
+                            buttonItem.textContent = buttonInfo.text;
+                            
+                            buttonItem.addEventListener('click', () => {
+                                document.querySelectorAll('.button-item').forEach(b => b.classList.remove('selected'));
+                                buttonItem.classList.add('selected');
+                                
+                                document.getElementById('button-text').value = buttonItem.textContent;
+                                document.getElementById('button-color').value = buttonInfo.color;
+                                document.getElementById('button-color-preview').style.backgroundColor = buttonInfo.color;
+                                document.getElementById('button-color-hex').textContent = buttonInfo.color;
+                                document.getElementById('button-url').value = buttonItem.dataset.url;
+                            });
+                            
+                            buttonGrid.appendChild(buttonItem);
+                        });
+                        
+                        // Update preview
+                        updatePagePreview();
+                        updatePreview();
+                    } else {
+                        alert(result.message);
+                    }
+                }
+            });
+            
+            // Page select change
+            currentPageSelect.addEventListener('change', () => {
+                // Save current buttons to current page
+                pageManager.saveCurrentButtons();
+                
+                // Set new current page
+                const newPageId = currentPageSelect.value;
+                pageManager.setCurrentPage(newPageId);
+                const newPage = pageManager.getCurrentPage();
+                
+                // Update page title input
+                pageTitleInput.value = newPage.title;
+                
+                // Clear buttons
+                const buttonGrid = document.getElementById('button-grid');
+                buttonGrid.innerHTML = '';
+                
+                // Add new page buttons
+                newPage.buttons.forEach((buttonInfo, index) => {
+                    const buttonItem = document.createElement('div');
+                    buttonItem.className = 'button-item';
+                    buttonItem.dataset.index = index;
+                    buttonItem.dataset.url = buttonInfo.url;
+                    buttonItem.style.backgroundColor = buttonInfo.color;
+                    buttonItem.textContent = buttonInfo.text;
+                    
+                    buttonItem.addEventListener('click', () => {
+                        document.querySelectorAll('.button-item').forEach(b => b.classList.remove('selected'));
+                        buttonItem.classList.add('selected');
+                        
+                        document.getElementById('button-text').value = buttonItem.textContent;
+                        document.getElementById('button-color').value = buttonInfo.color;
+                        document.getElementById('button-color-preview').style.backgroundColor = buttonInfo.color;
+                        document.getElementById('button-color-hex').textContent = buttonInfo.color;
+                        document.getElementById('button-url').value = buttonItem.dataset.url;
+                    });
+                    
+                    buttonGrid.appendChild(buttonItem);
+                });
+                
+                // Update preview
+                updatePagePreview();
+                updatePreview();
+            });
+            
+            // Page title change
+            pageTitleInput.addEventListener('input', () => {
+                const currentPage = pageManager.getCurrentPage();
+                currentPage.title = pageTitleInput.value;
+                
+                // Update page preview title
+                document.getElementById('page-preview-title').textContent = currentPage.title;
+                
+                // Update page select
+                updatePageSelect();
+            });
+            
+            // Initialize
+            updatePagePreview();
+            
+            // Save initial buttons to home page
+            const initialButtons = document.querySelectorAll('.button-item');
+            const buttonData = [];
+            
+            initialButtons.forEach(button => {
+                buttonData.push({
+                    text: button.textContent,
+                    color: button.style.backgroundColor,
+                    url: button.dataset.url || '#'
+                });
+            });
+            
+            pageManager.updatePageButtons('index', buttonData);
+        }
+    </script>
+</body>
+</html>
+
