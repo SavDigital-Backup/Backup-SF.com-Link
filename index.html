@@ -9,10 +9,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 </head>
 <script>
-    var password = prompt("Masukkan Password untuk mengakses backup web Savouryfactory.com:");
-    if (password !== "Savourydigital#") {
-        document.body.innerHTML = "<h2 style='text-align:center; margin-top:20%; color:white; font-family:sans-serif;'>Akses Ditolak. Password Salah.</h2>";
-    }
+    // 1. Sembunyikan seluruh isi web terlebih dahulu seketika saat loading
+    document.body.style.display = 'none';
+
+    // 2. Cek status dari GitHub
+    fetch('mode.txt?v=' + new Date().getTime())
+        .then(response => response.text())
+        .then(data => {
+            if(data.trim() === 'OFF') {
+                // JIKA OFF: Ganti isi layar dengan pesan Normal, lalu tampilkan (TANPA PASSWORD)
+                document.body.innerHTML = '<h2 style="color:white;text-align:center;margin-top:20vh;font-family:sans-serif;line-height:1.5;">Sistem Utama Berjalan Normal.<br><span style="font-weight:400;font-size:1.2rem;">Silakan akses portal dari web utama: <a href="http://savouryfactory.com" style="color:#00bcd4;">savouryfactory.com</a></span></h2>';
+                document.body.style.display = 'block'; 
+                
+            } else if(data.trim() === 'ON') {
+                // JIKA ON: Tahan layar tetap gelap, dan minta Password
+                var password = prompt("Mode Darurat Aktif.\nMasukkan Password untuk mengakses portal:");
+                
+                if (password === "Savoury**") { 
+                    // Jika password BENAR: Baru tampilkan tombol-tombol link
+                    document.body.style.display = 'block'; 
+                } else {
+                    // Jika password SALAH atau tombol Cancel ditekan: Kunci akses
+                    document.body.innerHTML = "<h2 style='text-align:center; margin-top:20vh; color:white; font-family:sans-serif;'>Akses Ditolak. Password Salah.</h2>";
+                    document.body.style.display = 'block';
+                }
+            }
+        }).catch(err => {
+            document.body.innerHTML = "<h2 style='color:white;text-align:center;'>Koneksi terputus.</h2>";
+            document.body.style.display = 'block';
+        });
 </script>
 <body dir="ltr" spellcheck="false" style="direction: ltr; min-height: 901px;" class="">
     <div class="container">
